@@ -61,7 +61,7 @@ export default function CtaButton({
           onClick={onClick}
           target={target}
           rel={rel}
-          className={`${baseClasses} hover:opacity-95 hover:scale-105 shadow-md`}
+          className={`${baseClasses} `}
           style={style}
         >
           {animatedContent}
@@ -73,7 +73,7 @@ export default function CtaButton({
       <button
         type={type}
         onClick={onClick}
-        className={`${baseClasses} hover:opacity-95 hover:scale-105 shadow-md`}
+        className={`${baseClasses}`}
         style={style}
       >
         {animatedContent}
@@ -89,7 +89,7 @@ export default function CtaButton({
           onClick={onClick}
           target={target}
           rel={rel}
-          className={`${baseClasses} border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 hover:bg-neutral-900/60`}
+          className={`${baseClasses} border border-neutral-800 text-neutral-300 hover:text-white `}
         >
           {animatedContent}
         </Link>
