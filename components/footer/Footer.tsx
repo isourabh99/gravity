@@ -3,6 +3,7 @@
 import GravityLogo from "@/components/logo/GravityLogo";
 import Link from "next/link";
 import { useGlobalColor } from "@/hooks/useGlobalColor";
+import { motion } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
 import CtaButton from "@/components/ui/CtaButton";
 
@@ -13,22 +14,40 @@ export default function Footer() {
     <footer className="border-t border-neutral-800 bg-black text-neutral-300 pt-24 pb-6 px-6 lg:px-14 select-none transition-colors duration-300 h-screen min-h-[650px] flex flex-col justify-between">
       <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-8">
 
-        {/* Top Row: Giant Logo */}
-        <div className="w-full text-left overflow-visible py-2 border-b border-neutral-900 pb-6">
+        {/* Top Row: Giant Logo with Entrance Animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full text-left overflow-visible py-2 border-b border-neutral-900 pb-6"
+        >
           <GravityLogo showLink={true} textSize="text-5xl sm:text-7xl lg:text-[8.5rem]" />
-        </div>
+        </motion.div>
 
         {/* Middle Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pt-2 items-start">
           
-          {/* Left Column: Agency Bio + Newsletter (No Outline, Left Bottom Position) */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Left Column: Agency Bio + Newsletter with Entrance Animation */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+            className="lg:col-span-5 space-y-6"
+          >
             <p className="text-xs text-neutral-400 leading-relaxed max-w-md">
               Gravity Studios is a premier IT agency & software engineering studio. We build custom Web & Mobile Applications, Enterprise CRM/ERP Systems, E-Commerce platforms, and AI-driven solutions tailored for modern businesses.
             </p>
 
-            {/* Newsletter Section without Outline Box */}
-            <div className="space-y-3 max-w-md">
+            {/* Newsletter Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="space-y-3 max-w-md"
+            >
               <h4
                 className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
                 style={{ color: currentColor }}
@@ -57,11 +76,17 @@ export default function Footer() {
                   </CtaButton>
                 </div>
               </form>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Services / Capabilities */}
-          <div className="lg:col-span-3 space-y-3">
+          {/* Services Column with Entrance Animation */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
+            className="lg:col-span-3 space-y-3"
+          >
             <h4
               className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
               style={{ color: currentColor }}
@@ -75,10 +100,16 @@ export default function Footer() {
               <li className="hover:text-white transition-colors cursor-pointer">AI & Automation</li>
               <li className="hover:text-white transition-colors cursor-pointer">Cloud Architecture & DevOps</li>
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Studio Contact */}
-          <div className="lg:col-span-4 space-y-6">
+          {/* Studio Contact Column with Entrance Animation */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
+            className="lg:col-span-4 space-y-6"
+          >
             <div className="space-y-3">
               <h4
                 className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
@@ -108,16 +139,16 @@ export default function Footer() {
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 
-        {/* Copyright Bar at the very end */}
+        {/* Copyright Bar at the very end with Entrance Animation */}
         <CopyrightBar
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ amount: 0.2 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
           className="mt-auto"
         />
 
