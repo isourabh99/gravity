@@ -6,13 +6,27 @@ import { useGlobalColor } from "@/hooks/useGlobalColor";
 import { motion } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
 import CtaButton from "@/components/ui/CtaButton";
+import GravityVectorBackground from "@/components/hero/GravityVectorBackground";
 
 export default function Footer() {
   const { currentColor } = useGlobalColor();
 
   return (
-    <footer className="border-t border-neutral-800 bg-black text-neutral-300 pt-24 pb-6 px-6 lg:px-14 select-none transition-colors duration-300 h-screen min-h-[650px] flex flex-col justify-between">
-      <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-8">
+    <footer className="relative border-t border-neutral-800 bg-black text-neutral-300 pt-20 pb-6 px-6 lg:px-14 select-none transition-colors duration-300 h-screen min-h-[650px] flex flex-col justify-between overflow-hidden">
+      {/* 1px Vector Gravitational Cosmic Background Overlay */}
+      <GravityVectorBackground />
+
+      {/* Background Subtle Ambient Glow */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 0.15 }}
+        viewport={{ amount: 0.2 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="absolute bottom-1/3 left-1/2 -translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-colors duration-700"
+        style={{ backgroundColor: currentColor }}
+      />
+
+      <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-6 relative z-10">
 
         {/* Top Row: Giant Logo with Entrance Animation */}
         <motion.div
@@ -20,7 +34,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full text-left overflow-visible py-2 border-b border-neutral-900 pb-6"
+          className="w-full text-left overflow-visible py-2 border-b border-neutral-900 pb-4"
         >
           <GravityLogo showLink={true} textSize="text-5xl sm:text-7xl lg:text-[8.5rem]" />
         </motion.div>
@@ -34,7 +48,7 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.2 }}
             transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="lg:col-span-5 space-y-6"
+            className="lg:col-span-5 space-y-5"
           >
             <p className="text-xs text-neutral-400 leading-relaxed max-w-md">
               Gravity Studios is a premier IT agency & software engineering studio. We build custom Web & Mobile Applications, Enterprise CRM/ERP Systems, E-Commerce platforms, and AI-driven solutions tailored for modern businesses.
@@ -156,3 +170,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+

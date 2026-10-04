@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
 import CtaButton from "@/components/ui/CtaButton";
 import GravityOrbits from "@/components/hero/GravityOrbits";
+import GravityVectorBackground from "@/components/hero/GravityVectorBackground";
 
 export default function Hero() {
   const { currentColor } = useGlobalColor();
@@ -17,6 +18,9 @@ export default function Hero() {
 
   return (
     <section className="relative w-full h-screen min-h-[650px] bg-black text-neutral-100 flex flex-col justify-between px-6 lg:px-14 pt-28 pb-6 select-none overflow-hidden">
+      {/* 1px Vector Gravitational Cosmic Background Overlay */}
+      <GravityVectorBackground />
+
       {/* Background Subtle Ambient Glow */}
       <motion.div 
         initial={{ opacity: 0 }}
