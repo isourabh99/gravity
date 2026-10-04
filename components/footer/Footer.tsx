@@ -4,19 +4,21 @@ import GravityLogo from "@/components/logo/GravityLogo";
 import Link from "next/link";
 import { FaInstagram, FaLinkedinIn, FaGithub } from "react-icons/fa6";
 import { useGlobalColor } from "@/hooks/useGlobalColor";
+import CopyrightBar from "@/components/ui/CopyrightBar";
+import CtaButton from "@/components/ui/CtaButton";
 
 export default function Footer() {
   const { currentColor } = useGlobalColor();
 
   return (
-    <footer className="border-t border-neutral-800 bg-black text-neutral-300 pt-16 pb-12 px-6 lg:px-14 select-none transition-colors duration-300 min-h-screen flex flex-col justify-between">
-      <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-12">
-        
+    <footer className="border-t border-neutral-800 bg-black text-neutral-300 pt-24 pb-6 px-6 lg:px-14 select-none transition-colors duration-300 h-screen min-h-[650px] flex flex-col justify-between">
+      <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-8">
+
         {/* Top Row: Giant Logo (Left) + Newsletter Form (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-neutral-900 pb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-b border-neutral-900 pb-6">
           {/* Giant Watermark Brand Logo */}
-          <div className="lg:col-span-7 w-full text-left overflow-visible py-4">
-            <GravityLogo showLink={true} textSize="text-6xl sm:text-7xl lg:text-[8.5rem]" />
+          <div className="lg:col-span-7 w-full text-left overflow-visible py-2">
+            <GravityLogo showLink={true} textSize="text-5xl sm:text-7xl lg:text-[7.5rem]" />
           </div>
 
           {/* Newsletter Box to the Right of Giant Logo */}
@@ -36,13 +38,13 @@ export default function Footer() {
                 placeholder="Your email address"
                 className="w-full px-4 py-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-700 transition-colors"
               />
-              <button
+              <CtaButton
                 type="submit"
-                className="px-4 py-2.5 rounded-xl text-xs font-bold text-black transition-all cursor-pointer hover:opacity-90 shrink-0"
-                style={{ backgroundColor: currentColor }}
+                variant="primary" shape="pill"
+                className="py-2 px-4 shrink-0"
               >
                 Join
-              </button>
+              </CtaButton>
             </form>
           </div>
         </div>
@@ -146,14 +148,14 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright Bar at the very end */}
-        <div className="pt-8 border-t border-neutral-900 flex flex-col sm:flex-row items-center justify-between text-[11px] text-neutral-500 font-mono gap-4 mt-auto">
-          <p>© {new Date().getFullYear()} Gravity Studios All rights reserved.</p>
-          <div className="flex gap-6">
-            <span className="hover:text-neutral-400 cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-neutral-400 cursor-pointer">Terms of Service</span>
-          </div>
-        </div>
+        {/* Copyright Bar at the very end (Fades in smoothly when scrolling into Footer) */}
+        <CopyrightBar
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mt-auto"
+        />
 
       </div>
     </footer>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-export const COLORS = ["#10B981", "#A855F7", "#F59E0B", "#06B6D4", "#FFFFFF"];
+export const COLORS = ["#10B981", "#A855F7", "#06B6D4", "#FFFFFF"];
 
 // Global singleton state shared synchronously across the entire app
 let globalColorIndex = 0;
