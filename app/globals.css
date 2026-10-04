@@ -43,8 +43,13 @@ body {
 
 /* Custom Marquee Animation */
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
@@ -59,13 +64,16 @@ body {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #050505;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #262626;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #10B981;
 }

@@ -6,18 +6,9 @@ import Link from "next/link";
 
 export default function Navbar() {
   const { scrollY } = useScroll();
-
   const blurPx = useTransform(scrollY, [0, 120], [8, 20]);
   const backdropFilter = useMotionTemplate`blur(${blurPx}px)`;
-  const bgOpacity = useTransform(scrollY, [0, 120], [0.75, 0.95]);
 
-  const scrollToContact = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const contactElement = document.getElementById("contact");
-    if (contactElement) {
-      contactElement.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <motion.header
@@ -31,7 +22,6 @@ export default function Navbar() {
         {/* Right: Gray Text Link (White on Hover) */}
         <Link
           href="#contact"
-          onClick={scrollToContact}
           className="font-mg12-regular text-xl text-neutral-400 hover:text-white tracking-wide transition-all duration-500 cursor-pointer"
         >
           Contact

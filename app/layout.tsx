@@ -4,13 +4,13 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = Geist({
- variable: "--font-geist-sans",
- subsets: ["latin"],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
- variable: "--font-geist-mono",
- subsets: ["latin"],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 const mg12Bold = localFont({
@@ -26,19 +26,20 @@ const mg12Regular = localFont({
 });
 
 export const metadata: Metadata = {
- title: "Zynexis Technologies",
- description: "The Benchmark Of Innovation",
+  title: "Gravity",
+  description: "The Benchmark Of Innovation",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
- return (
- <html
- lang="en"
- className={`${geistSans.variable} ${geistMono.variable} ${mg12Bold.variable} ${mg12Regular.variable} h-full antialiased`}
- >
- <body className="min-h-full flex flex-col">
- {children}
- </body>
- </html>
- );
+  return (
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${mg12Bold.variable} ${mg12Regular.variable} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {children}
+      </body>
+    </html>
+  );
 }

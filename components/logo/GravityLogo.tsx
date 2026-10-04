@@ -1,40 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-
-const COLORS = ["#10B981", "#A855F7", "#F59E0B", "#06B6D4", "#FFFFFF"];
+import { useGlobalColor } from "@/hooks/useGlobalColor";
 
 export interface GravityLogoProps {
   className?: string;
   showLink?: boolean;
   isDark?: boolean;
   mode?: string;
+  textSize?: string;
 }
 
 export default function GravityLogo({
   className = "",
   showLink = true,
+  textSize = "text-2xl",
 }: GravityLogoProps) {
-  const [colorIndex, setColorIndex] = useState(0);
-
-  // Global click listener to cycle colors on screen click
-  useEffect(() => {
-    const handleGlobalClick = () => {
-      setColorIndex((prev) => (prev + 1) % COLORS.length);
-    };
-
-    window.addEventListener("click", handleGlobalClick);
-    return () => window.removeEventListener("click", handleGlobalClick);
-  }, []);
-
-  const currentColor = COLORS[colorIndex];
+  const { currentColor } = useGlobalColor();
 
   const logoContent = (
     <div className={`relative inline-flex items-center justify-center select-none group ${className}`}>
       {/* Brand Text 'gravity' */}
       <span
-        className="font-mg12-bold text-2xl font-bold tracking-wide transition-colors duration-500 relative z-10"
+        className={`font-mg12-bold ${textSize} font-bold tracking-wide transition-colors duration-500 relative z-10 leading-tight py-1`}
         style={{
           color: currentColor,
           fontFamily: "var(--font-mg12-bold), Inter, var(--font-sans), system-ui, sans-serif",
