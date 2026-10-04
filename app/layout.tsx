@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,6 +13,18 @@ const geistMono = Geist_Mono({
  subsets: ["latin"],
 });
 
+const mg12Bold = localFont({
+  src: "./fonts/mg12-bold.woff2",
+  variable: "--font-mg12-bold",
+  display: "swap",
+});
+
+const mg12Regular = localFont({
+  src: "./fonts/mg12-regular.woff2",
+  variable: "--font-mg12-regular",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
  title: "Zynexis Technologies",
  description: "The Benchmark Of Innovation",
@@ -21,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
  return (
  <html
  lang="en"
- className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+ className={`${geistSans.variable} ${geistMono.variable} ${mg12Bold.variable} ${mg12Regular.variable} h-full antialiased`}
  >
  <body className="min-h-full flex flex-col">
  {children}
