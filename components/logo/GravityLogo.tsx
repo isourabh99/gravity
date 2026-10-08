@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useGlobalColor } from "@/hooks/useGlobalColor";
 
 export interface GravityLogoProps {
   className?: string;
@@ -14,17 +13,17 @@ export interface GravityLogoProps {
 export default function GravityLogo({
   className = "",
   showLink = true,
+  isDark = false,
   textSize = "text-2xl",
 }: GravityLogoProps) {
-  const { currentColor } = useGlobalColor();
-
   const logoContent = (
     <div className={`relative inline-flex items-center justify-center select-none group ${className}`}>
       {/* Brand Text 'gravity' */}
       <span
-        className={`font-mg12-bold ${textSize} font-bold tracking-wide transition-colors duration-500 relative z-10 leading-tight py-1`}
+        className={`font-mg12-bold ${textSize} font-bold tracking-wide relative z-10 leading-tight py-1 ${
+          isDark ? "text-black" : "text-white"
+        }`}
         style={{
-          color: currentColor,
           fontFamily: "var(--font-mg12-bold), Inter, var(--font-sans), system-ui, sans-serif",
         }}
       >
@@ -34,11 +33,11 @@ export default function GravityLogo({
       {/* Orbiting Circle Dot around the text */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center animate-[spin_5s_linear_infinite]">
         <span
-          className="absolute -top-1 w-1 h-1 rounded-full transition-colors duration-500"
-          style={{
-            backgroundColor: currentColor,
-            boxShadow: `0 0 8px ${currentColor}`,
-          }}
+          className={`absolute -top-1 w-1 h-1 rounded-full ${
+            isDark
+              ? "bg-black shadow-[0_0_8px_rgba(0,0,0,0.4)]"
+              : "bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+          }`}
         />
       </div>
     </div>

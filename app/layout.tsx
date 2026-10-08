@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import UniversalLoaderWrapper from "@/components/loader/UniversalLoaderWrapper";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,8 +40,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        {children}
+        <SmoothScrollProvider>
+          <UniversalLoaderWrapper>
+            {children}
+          </UniversalLoaderWrapper>
+        </SmoothScrollProvider>
       </body>
     </html>
   );
 }
+
+

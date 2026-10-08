@@ -1,46 +1,325 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GravityLogo from "@/components/logo/GravityLogo";
+import CopyrightBar from "@/components/ui/CopyrightBar";
+import ScrambleText from "@/components/ui/ScrambleText";
+import { useSmoothScroll } from "@/components/providers/SmoothScrollProvider";
 import Link from "next/link";
 
 export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeItem, setActiveItem] = useState("Projects");
+  const [isDarkBg, setIsDarkBg] = useState(true);
   const { scrollY } = useScroll();
-  const blurPx = useTransform(scrollY, [0, 120], [8, 20]);
-  const backdropFilter = useMotionTemplate`blur(${blurPx}px)`;
+  const lenis = useSmoothScroll();
+
+  // Dynamically detect whether the section under the fixed Navbar is dark or light
+  useEffect(() => {
+    const checkBgTheme = () => {
+      if (typeof window === "undefined") return;
+      const x = window.innerWidth / 2;
+      const y = 45; // top bar area
+
+      const elements = document.elementsFromPoint(x, y);
+      let foundDark = true;
+
+      for (const el of elements) {
+        if (el.closest("header") || el.tagName === "HEADER") continue;
+
+        // Check explicit data-theme attribute
+        const theme =
+          el.getAttribute("data-theme") ||
+          el.closest("[data-theme]")?.getAttribute("data-theme");
+        if (theme) {
+          foundDark = theme === "dark";
+          break;
+        }
+
+        // Fallback: check computed background color brightness
+        const section = el.closest("section, footer, main, div");
+        if (section) {
+          const bg = window.getComputedStyle(section).backgroundColor;
+          const rgb = bg.match(/\d+/g);
+          if (rgb && rgb.length >= 3) {
+            const brightness =
+              (Number(rgb[0]) * 299 + Number(rgb[1]) * 587 + Number(rgb[2]) * 114) / 1000;
+            // brightness < 128 is dark, otherwise light
+            foundDark = brightness < 128;
+            break;
+          }
+        }
+      }
+
+      setIsDarkBg(foundDark);
+    };
+
+    if (lenis) {
+      lenis.on("scroll", checkBgTheme);
+    }
+
+    window.addEventListener("scroll", checkBgTheme, { passive: true });
+    window.addEventListener("resize", checkBgTheme, { passive: true });
+    checkBgTheme();
+
+    return () => {
+      if (lenis) {
+        lenis.off("scroll", checkBgTheme);
+      }
+      window.removeEventListener("scroll", checkBgTheme);
+      window.removeEventListener("resize", checkBgTheme);
+    };
+  }, [lenis]);
+
+  // Center navigation links translate UP and fade OUT smoothly on scroll down
+  const linksY = useTransform(scrollY, [0, 150], [0, -40]);
+  const linksOpacity = useTransform(scrollY, [0, 120], [1, 0]);
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -25 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 z-50 lg:px-14 p-6 w-full"
-      style={{ backdropFilter }}
-    >
-      <nav className="relative max-w-8xl mx-auto flex items-center justify-between">
-        {/* Left: Gravity Logo with Entrance Animation */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
-        >
-          <GravityLogo isDark={true} />
-        </motion.div>
+    <>
+      {/* Fixed Main Header matching Screenshot 1 */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6 select-none pointer-events-auto transition-colors duration-300">
+        <nav className="max-w-8xl mx-auto flex items-start justify-between">
+          {/* Top Left Logo (Adapts to black on light backgrounds, white on dark backgrounds) */}
+          <div className="flex items-center">
+            <GravityLogo showLink={true} isDark={!isDarkBg} textSize="text-xl sm:text-2xl" />
+          </div>
 
-        {/* Right: Contact Link with Entrance Animation */}
-        <motion.div
-          initial={{ opacity: 0, x: 15 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
-        >
-          <Link
-            href="#contact"
-            className="font-mg12-regular text-xl text-neutral-400 hover:text-white tracking-wide transition-all duration-500 cursor-pointer"
+          {/* Center 2-Column Links Layout (Slides up & fades out on scroll, color adapts to background) */}
+          <motion.div
+            style={{ y: linksY, opacity: linksOpacity }}
+            className={`hidden md:flex items-start gap-14 lg:gap-16 text-sm sm:text-[15px] font-mg12-regular font-light transition-colors duration-300 ${
+              isDarkBg ? "text-neutral-300" : "text-neutral-700"
+            }`}
           >
-            Contact
-          </Link>
-        </motion.div>
-      </nav>
-    </motion.header>
+            {/* Column 1 */}
+            <div className="flex flex-col space-y-2">
+              {[
+                { name: "Projects", href: "/#projects" },
+                { name: "Studio", href: "/#studio" },
+                { name: "Services", href: "/#services" },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`group relative inline-block transition-colors duration-200 ${
+                    isDarkBg
+                      ? "text-neutral-300 hover:text-white"
+                      : "text-neutral-700 hover:text-black"
+                  }`}
+                >
+                  <span className="relative inline-block transition-transform duration-200 group-hover:translate-x-1.5">
+                    {link.name}
+                    <span
+                      className={`absolute -bottom-0.5 left-0 w-full h-[1px] ${
+                        isDarkBg ? "bg-white" : "bg-black"
+                      } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-linear pointer-events-none`}
+                    />
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Column 2 */}
+            <div className="flex flex-col space-y-2">
+              {[
+                { name: "News", href: "/#news" },
+                { name: "Industries", href: "/#industries" },
+                { name: "Contact", href: "/contact" },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`group relative inline-block transition-colors duration-200 ${
+                    isDarkBg
+                      ? "text-neutral-300 hover:text-white"
+                      : "text-neutral-700 hover:text-black"
+                  }`}
+                >
+                  <span className="relative inline-block transition-transform duration-200 group-hover:translate-x-1.5">
+                    {link.name}
+                    <span
+                      className={`absolute -bottom-0.5 left-0 w-full h-[1px] ${
+                        isDarkBg ? "bg-white" : "bg-black"
+                      } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-linear pointer-events-none`}
+                    />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Top Right Hamburger Icon Button (Adapts to black on light bg, white on dark bg) */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className={`group p-2 flex flex-col items-end justify-center gap-1.5 cursor-pointer focus:outline-none transition-colors duration-300 ${
+              isDarkBg ? "text-white" : "text-black"
+            }`}
+            aria-label="Open Navigation Menu"
+          >
+            <span
+              className={`w-6 h-[1.5px] transition-all duration-300 ${
+                isDarkBg ? "bg-white" : "bg-black"
+              }`}
+            />
+            <span
+              className={`w-6 h-[1.5px] transition-all duration-300 group-hover:scale-x-50 origin-center ${
+                isDarkBg ? "bg-white" : "bg-black"
+              }`}
+            />
+          </button>
+        </nav>
+      </header>
+
+      {/* Navigation Popup Menu Originating from Top-Right Menu Icon */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Backdrop Dim */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm cursor-pointer"
+            />
+
+            {/* Popup Menu */}
+            <motion.aside
+              initial={{ opacity: 0, scale: 0.15, transformOrigin: "top right", borderRadius: "32px" }}
+              animate={{ opacity: 1, scale: 1, transformOrigin: "top right", borderRadius: "24px" }}
+              exit={{ opacity: 0, scale: 0.15, transformOrigin: "top right", borderRadius: "32px" }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-3 right-3 sm:top-5 sm:right-5 md:top-6 md:right-6 z-[100] w-[calc(100vw-1.5rem)] sm:w-[540px] md:w-[600px] lg:w-[620px] max-h-[calc(100vh-1.5rem)] sm:max-h-[calc(100vh-2.5rem)] md:max-h-[calc(100vh-3rem)] h-fit bg-[#EFEFEF] text-neutral-900 p-6 sm:p-8 md:p-9 flex flex-col justify-between overflow-hidden select-none shadow-2xl border border-neutral-300"
+            >
+              {/* Popup Top Header */}
+              <div className="flex items-center justify-between pb-3 sm:pb-4">
+                <span className="text-xs sm:text-[13px] font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+                  NAVIGATION
+                </span>
+
+                {/* Close Button: Pure square white box, no rounded, no shadow, expanding gray circle on hover, cross spins */}
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  className="group relative w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-none shadow-none  flex items-center justify-center overflow-hidden cursor-pointer focus:outline-none"
+                  aria-label="Close Menu"
+                >
+                  {/* Expanding gray circle from center (not black) */}
+                  <span
+                    className="absolute w-3 h-3 rounded-full bg-neutral-200 scale-0 group-hover:scale-[6.5] transition-transform duration-500 ease-out origin-center pointer-events-none"
+                    aria-hidden="true"
+                  />
+
+                  {/* Spinning cross icon */}
+                  <svg
+                    className="relative z-10 w-6 h-6 text-neutral-900  transition-all duration-300 ease-out group-hover:rotate-90"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Main Nav Links Stack */}
+              <div className="py-2 sm:py-3 space-y-1 sm:space-y-1.5 md:space-y-2">
+                {[
+                  { name: "Home", href: "/" },
+                  { name: "Projects", href: "/#projects" },
+                  { name: "Services", href: "/#services" },
+                  { name: "Industries", href: "/#industries" },
+                  { name: "Studio", href: "/#studio" },
+                  { name: "News", href: "/#news" },
+                  { name: "Contact", href: "/contact" },
+                ].map((item) => {
+                  const isActive = activeItem === item.name;
+                  return (
+                    <div key={item.name} className="relative">
+                      <Link
+                        href={item.href}
+                        onClick={() => {
+                          setActiveItem(item.name);
+                          setMenuOpen(false);
+                        }}
+                        className={`group relative inline-flex items-center text-3xl sm:text-4xl md:text-[42px] leading-[1.18] font-mg12-regular font-light tracking-tight transition-colors duration-200 ${
+                          isActive ? "text-neutral-500" : "text-neutral-900"
+                        }`}
+                      >
+                        <span className="relative inline-block transition-transform duration-300 ease-out group-hover:translate-x-3">
+                          {item.name}
+                          {/* Thin linear underline starting from LEFT */}
+                          <span
+                            className={`absolute -bottom-0.5 left-0 w-full h-[1.5px] ${
+                              isActive ? "bg-neutral-500" : "bg-neutral-900"
+                            } origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-linear pointer-events-none`}
+                          />
+                        </span>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Popup Footer Grid & Copyright Bar */}
+              <div className="space-y-4 pt-4 border-t border-neutral-300/80">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <span className="block text-[13px] sm:text-sm font-mg12-regular font-light text-neutral-500 tracking-wider uppercase select-none">
+                      Most Recent Projects
+                    </span>
+                    <div className="space-y-1.5 text-neutral-900 font-mg12-regular text-sm sm:text-[15px] flex flex-col items-start">
+                      {[
+                        "BotBlox [DeepTech]",
+                        "Hylight [DeepTech]",
+                        "Skipper NDT [DeepTech]",
+                        "Kestrix [Climate]",
+                      ].map((proj) => (
+                        <span key={proj} className="block cursor-pointer">
+                          <ScrambleText text={proj} hoverColor="#ED3327" />
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="block text-[13px] sm:text-sm font-mg12-regular font-light text-neutral-500 tracking-wider uppercase select-none">
+                      Socials
+                    </span>
+                    <div className="space-y-1.5 text-neutral-900 font-mg12-regular text-sm sm:text-[15px] flex flex-col items-start">
+                      <a
+                        href="https://linkedin.com/in/isourabh99"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block cursor-pointer"
+                      >
+                        <ScrambleText text="LinkedIn" hoverColor="#ED3327" />
+                      </a>
+                      <a
+                        href="https://instagram.com/isaurabh_99"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block cursor-pointer"
+                      >
+                        <ScrambleText text="Instagram" hoverColor="#ED3327" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reused CopyrightBar inside Menu */}
+                <div className="pt-3 border-t border-neutral-300/60">
+                  <CopyrightBar variant="menu" />
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

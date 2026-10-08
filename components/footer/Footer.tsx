@@ -1,174 +1,144 @@
 "use client";
 
+import React from "react";
 import GravityLogo from "@/components/logo/GravityLogo";
-import Link from "next/link";
-import { useGlobalColor } from "@/hooks/useGlobalColor";
-import { motion } from "framer-motion";
 import CopyrightBar from "@/components/ui/CopyrightBar";
-import CtaButton from "@/components/ui/CtaButton";
-import GravityVectorBackground from "@/components/hero/GravityVectorBackground";
+import ScrambleText from "@/components/ui/ScrambleText";
+import Link from "next/link";
 
 export default function Footer() {
-  const { currentColor } = useGlobalColor();
-
   return (
-    <footer className="relative border-t border-neutral-800 bg-black text-neutral-300 pt-20 pb-6 px-6 lg:px-14 select-none transition-colors duration-300 h-screen min-h-[650px] flex flex-col justify-between overflow-hidden">
-      {/* 1px Vector Gravitational Cosmic Background Overlay */}
-      <GravityVectorBackground />
+    <footer data-theme="light" className="relative bg-[#F9F9F7] text-neutral-900 px-6 sm:px-12 py-6 sm:py-8 select-none h-screen max-h-screen flex flex-col justify-between border-t border-neutral-300 overflow-hidden">
+      <div className="max-w-8xl mx-auto w-full flex-1 flex flex-col justify-between">
 
-      {/* Background Subtle Ambient Glow */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 0.15 }}
-        viewport={{ amount: 0.2 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="absolute bottom-1/3 left-1/2 -translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[140px] pointer-events-none transition-colors duration-700"
-        style={{ backgroundColor: currentColor }}
-      />
+        {/* Top Header Row matching Screenshot */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-6 border-b border-neutral-300">
+          {/* Giant Title: GET IN TOUCH. */}
+          <div className="lg:col-span-8">
+            <h2 className="font-mg12-regular text-4xl sm:text-6xl lg:text-[6.5rem] xl:text-[7.2rem] leading-none text-neutral-900 tracking-tight">
+              GET IN TOUCH.
+            </h2>
+          </div>
 
-      <div className="max-w-8xl mx-auto w-full flex flex-col justify-between flex-1 space-y-6 relative z-10">
-
-        {/* Top Row: Giant Logo with Entrance Animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 30, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ amount: 0.2 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full text-left overflow-visible py-2 border-b border-neutral-900 pb-4"
-        >
-          <GravityLogo showLink={true} textSize="text-5xl sm:text-7xl lg:text-[8.5rem]" />
-        </motion.div>
-
-        {/* Middle Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pt-2 items-start">
-          
-          {/* Left Column: Agency Bio + Newsletter with Entrance Animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="lg:col-span-5 space-y-5"
-          >
-            <p className="text-xs text-neutral-400 leading-relaxed max-w-md">
-              Gravity Studios is a premier IT agency & software engineering studio. We build custom Web & Mobile Applications, Enterprise CRM/ERP Systems, E-Commerce platforms, and AI-driven solutions tailored for modern businesses.
+          {/* Right Column Intro Text */}
+          <div className="lg:col-span-4 pt-2">
+            <p className="text-sm sm:text-[15px] font-mg12-regular font-light text-neutral-600 leading-relaxed max-w-md">
+              We build premium websites on Framer, Astro or Next.js, using motion design and interactive 3D to make complex products clear and easy to buy.
             </p>
+          </div>
+        </div>
 
-            {/* Newsletter Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ amount: 0.2 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              className="space-y-3 max-w-md"
-            >
-              <h4
-                className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
-                style={{ color: currentColor }}
+        {/* Middle 4-Column Content Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 py-4 sm:py-6 text-sm sm:text-[15px] font-mg12-regular font-light">
+
+          {/* Column 1: Vertical Social Links (LinkedIn & Instagram only, removed Twitter & GitHub) */}
+          <div className="lg:col-span-3 flex flex-col border-t border-neutral-300">
+            {[
+              { name: "LinkedIn", href: "https://linkedin.com/in/isourabh99" },
+              { name: "Instagram", href: "https://instagram.com/isaurabh_99" },
+            ].map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group w-full py-2.5 sm:py-3 border-b border-neutral-300 flex items-center justify-between text-neutral-800 cursor-pointer"
               >
-                NEWSLETTER
-              </h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                Subscribe to get the latest insights on software engineering, AI, and digital product design.
-              </p>
-              
-              {/* Input Bar with Embedded Button Inside */}
-              <form onSubmit={(e) => e.preventDefault()} className="pt-1">
-                <div className="relative flex items-center w-full rounded-full bg-neutral-900/90 border border-neutral-800/80 p-1.5 focus-within:border-neutral-700 transition-colors">
-                  <input
-                    type="email"
-                    placeholder="Your email address"
-                    className="w-full bg-transparent px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none"
-                  />
-                  <CtaButton
-                    type="submit"
-                    variant="primary"
-                    shape="pill"
-                    className="py-2 px-5 text-xs shrink-0 font-bold"
-                  >
-                    Join
-                  </CtaButton>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
+                <ScrambleText text={social.name} hoverColor="#ED3327" />
+                <span className="text-sm transition-colors duration-200 group-hover:text-[#ED3327]">
+                  ↗
+                </span>
+              </a>
+            ))}
+          </div>
 
-          {/* Services Column with Entrance Animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
-            transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
-            className="lg:col-span-3 space-y-3"
-          >
-            <h4
-              className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
-              style={{ color: currentColor }}
-            >
-              OUR SERVICES
-            </h4>
-            <ul className="space-y-2 text-xs text-neutral-400">
-              <li className="hover:text-white transition-colors cursor-pointer">Web & Mobile Apps</li>
-              <li className="hover:text-white transition-colors cursor-pointer">Custom CRM & ERP Systems</li>
-              <li className="hover:text-white transition-colors cursor-pointer">E-Commerce Platforms</li>
-              <li className="hover:text-white transition-colors cursor-pointer">AI & Automation</li>
-              <li className="hover:text-white transition-colors cursor-pointer">Cloud Architecture & DevOps</li>
-            </ul>
-          </motion.div>
-
-          {/* Studio Contact Column with Entrance Animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2 }}
-            transition={{ duration: 0.7, delay: 0.35, ease: "easeOut" }}
-            className="lg:col-span-4 space-y-6"
-          >
-            <div className="space-y-3">
-              <h4
-                className="text-xs font-mono font-bold uppercase tracking-widest transition-colors duration-500"
-                style={{ color: currentColor }}
-              >
-                STUDIO CONTACT
-              </h4>
-              <div className="space-y-2 text-xs text-neutral-400 leading-relaxed">
-                <p>
-                  <strong className="text-white">Direct Line:</strong>{" "}
-                  <span className="font-mono transition-colors duration-500" style={{ color: currentColor }}>
-                    +91 8871795472
-                  </span>
-                </p>
-                <p>
-                  <strong className="text-white">Email:</strong>{" "}
-                  <a
-                    href="mailto:isourabhsoni99@gmail.com"
-                    className="hover:underline font-mono transition-colors duration-500"
-                    style={{ color: currentColor }}
-                  >
-                    isourabhsoni99@gmail.com
-                  </a>
-                </p>
-                <p className="text-[11px] text-neutral-500 pt-1">
-                  Gravity Mall 3rd Floor Badi Bamhori Indore<br />
-                </p>
+          {/* Column 2: Navigation & Latest Projects with ScrambleText hover */}
+          <div className="lg:col-span-3 space-y-6">
+            <div className="space-y-2">
+              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+                NAVIGATION
+              </span>
+              <div className="space-y-1.5 flex flex-col items-start">
+                {[
+                  { name: "Studio", href: "/#studio" },
+                  { name: "Our projects", href: "/#projects" },
+                  { name: "Our services", href: "/#services" },
+                  { name: "News", href: "/#news" },
+                  { name: "Contact", href: "/contact" },
+                ].map((item) => (
+                  <Link key={item.name} href={item.href} className="block">
+                    <ScrambleText text={item.name} hoverColor="#ED3327" />
+                  </Link>
+                ))}
               </div>
             </div>
-          </motion.div>
+
+            <div className="space-y-2">
+              <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+                LATEST PROJECTS
+              </span>
+              <div className="space-y-1.5 flex flex-col items-start">
+                {[
+                  "BotBlox Systems",
+                  "Hylight",
+                  "Artefact area",
+                  "Une Autre Île Productions",
+                ].map((proj) => (
+                  <span key={proj} className="block cursor-pointer">
+                    <ScrambleText text={proj} hoverColor="#ED3327" />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3: Contact with ScrambleText hover */}
+          <div className="lg:col-span-3 space-y-2">
+            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+              CONTACT
+            </span>
+            <div className="space-y-2 text-neutral-800">
+              <a href="mailto:isourabhsoni99@gmail.com" className="block">
+                <ScrambleText text="isourabhsoni99@gmail.com" hoverColor="#ED3327" />
+              </a>
+              <p className="font-mono text-sm sm:text-[14px] text-neutral-600">
+                Whatsapp : +91 8871795472
+              </p>
+            </div>
+          </div>
+
+          {/* Column 4: Legal with ScrambleText hover */}
+          <div className="lg:col-span-3 space-y-2">
+            <span className="block text-[13px] sm:text-sm font-mg12-regular font-light tracking-[0.2em] text-neutral-500 uppercase select-none">
+              LEGAL
+            </span>
+            <div className="space-y-1.5 flex flex-col items-start">
+              {["Legal notice", "Privacy policy"].map((legal) => (
+                <span key={legal} className="block cursor-pointer">
+                  <ScrambleText text={legal} hoverColor="#ED3327" />
+                </span>
+              ))}
+            </div>
+          </div>
 
         </div>
 
-        {/* Copyright Bar at the very end with Entrance Animation */}
-        <CopyrightBar
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
-          className="mt-auto"
-        />
+        {/* Bottom Footer Section: Logo + CopyrightBar (Reveals when end of website is reached) */}
+        <div className="pt-4 border-t border-neutral-300 space-y-3">
+          <div className="flex items-center justify-between">
+            <GravityLogo showLink={true} isDark={true} textSize="text-xl sm:text-2xl" />
+          </div>
+
+          {/* CopyrightBar: Hidden until website bottom is reached */}
+          <div className="pt-1">
+            <CopyrightBar variant="footer" />
+          </div>
+        </div>
 
       </div>
+
+      {/* Sentinel for detecting website bottom */}
+      <div id="footer-end-sentinel" className="w-full h-[1px] pointer-events-none -mt-[1px]" />
     </footer>
   );
 }
-
-

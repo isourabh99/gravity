@@ -2,44 +2,45 @@
 
 import React from "react";
 import Link from "next/link";
-import { useGlobalColor } from "@/hooks/useGlobalColor";
 
 export interface CtaButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "outline" | "ghost";
-  shape?: "pill" | "square" | "rounded";
+  variant?: "brand" | "outline" | "ghost";
+  shape?: "square" | "pill" | "rounded";
   href?: string;
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   target?: string;
   rel?: string;
 }
 
 export default function CtaButton({
   children,
-  variant = "primary",
-  shape = "pill",
+  variant = "brand",
+  shape = "square",
   href,
   className = "",
   onClick,
   type = "button",
+  disabled = false,
   target,
   rel,
 }: CtaButtonProps) {
-  const { currentColor } = useGlobalColor();
-
+  // Square no rounded as requested
   const shapeClasses =
-    shape === "pill"
-      ? "rounded-full"
-      : shape === "square"
+    shape === "square"
       ? "rounded-none"
-      : "rounded-xl";
+      : shape === "pill"
+      ? "rounded-full"
+      : "rounded-lg";
 
-  const baseClasses = `group relative inline-flex items-center justify-center font-bold text-xs sm:text-sm px-6 py-3 transition-all duration-300 select-none cursor-pointer active:scale-95 ${shapeClasses} ${className}`;
+  const baseClasses = `group relative inline-flex items-center justify-center font-mono text-xs sm:text-[13px] tracking-widest uppercase font-semibold px-8 py-4 select-none cursor-pointer overflow-hidden transition-colors duration-300 ${shapeClasses} ${className}`;
 
+  // Slot rolling text animation: text moves up and duplicate text comes in from down on hover
   const animatedContent = (
-    <span className="relative inline-flex items-center justify-center overflow-hidden">
+    <span className="relative inline-flex items-center justify-center overflow-hidden h-[1.3em] leading-none">
       {/* Primary text sliding up out of view on hover */}
       <span className="inline-flex items-center gap-2 transition-transform duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-full">
         {children}
@@ -51,60 +52,13 @@ export default function CtaButton({
     </span>
   );
 
-  if (variant === "primary") {
-    const style = { backgroundColor: currentColor, color: "#000000" };
-
-    if (href) {
-      return (
-        <Link
-          href={href}
-          onClick={onClick}
-          target={target}
-          rel={rel}
-          className={`${baseClasses} `}
-          style={style}
-        >
-          {animatedContent}
-        </Link>
-      );
-    }
-
-    return (
-      <button
-        type={type}
-        onClick={onClick}
-        className={`${baseClasses}`}
-        style={style}
-      >
-        {animatedContent}
-      </button>
-    );
-  }
+  // Default black bg, on hover changes to #ED3327
+  let variantClasses = "bg-black text-white hover:bg-[#ED3327]";
 
   if (variant === "outline") {
-    if (href) {
-      return (
-        <Link
-          href={href}
-          onClick={onClick}
-          target={target}
-          rel={rel}
-          className={`${baseClasses} border border-neutral-800 text-neutral-300 hover:text-white `}
-        >
-          {animatedContent}
-        </Link>
-      );
-    }
-
-    return (
-      <button
-        type={type}
-        onClick={onClick}
-        className={`${baseClasses} border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 hover:bg-neutral-900/60`}
-      >
-        {animatedContent}
-      </button>
-    );
+    variantClasses = "border border-neutral-300 text-black hover:bg-[#ED3327] hover:text-white hover:border-[#ED3327]";
+  } else if (variant === "ghost") {
+    variantClasses = "text-neutral-700 hover:text-black hover:bg-neutral-100";
   }
 
   if (href) {
@@ -114,7 +68,7 @@ export default function CtaButton({
         onClick={onClick}
         target={target}
         rel={rel}
-        className={`${baseClasses} text-neutral-300 hover:text-white hover:bg-neutral-900/40`}
+        className={`${baseClasses} ${variantClasses}`}
       >
         {animatedContent}
       </Link>
@@ -125,7 +79,8 @@ export default function CtaButton({
     <button
       type={type}
       onClick={onClick}
-      className={`${baseClasses} text-neutral-300 hover:text-white hover:bg-neutral-900/40`}
+      disabled={disabled}
+      className={`${baseClasses} ${variantClasses}`}
     >
       {animatedContent}
     </button>
